@@ -1,0 +1,26 @@
+nuget {
+   nuspec {
+      id = WildCoastLogging;
+      version : 1.0.0.0;
+      title: Wild Coast Logging;
+      authors: {Wild Coast Solutions};
+      owners: {Wild Coast Solutions};
+      licenseUrl: "http://www.opensource.org/licenses/mit-license.php";
+      iconUrl: "http://wildcoast.nz/nuget.png";
+      requireLicenseAcceptance:false;
+      summary:@"Simple, header only, no dependency logging library.";
+      description: @"Simple, header only, no dependency logging library with an emphasis on being clean and easy to use. Supports console and file logging.";
+      releaseNotes: "";
+      projectUrl: "https://github.com/WildCoastSolutions/Logging";
+      copyright: Copyright (c) 2014-2015 Wild Coast Solutions. All rights reserved.;
+      tags: { logging, native, c++, simple };
+   };
+ 
+   files {
+      nestedInclude: 
+         { 
+            #destination = ${d_include}Wild;
+            "*.h"
+         };
+   };
+}
