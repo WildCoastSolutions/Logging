@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     string reason = "things went wrong";
 
     SetupLogging();
-    AddFileDestination("application.log");
+    AddFileDestination("application.log"); // throws runtime_error if can't open
     SetDebugLevel(1);
 
     // Simple message
