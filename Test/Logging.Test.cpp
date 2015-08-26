@@ -44,7 +44,9 @@ void TestLogging()
             { I("foo", "bar") }),
         allLines.back() + "\n");
 
-    allLines.push_back(Timestamp() + " Info: Starting application, startup successful. Data {1: 2, 3: 4, foo: bar, Kung Fu: Hustle}");
+    b.push_back(I("5", "6"));
+
+    allLines.push_back(Timestamp() + " Info: Starting application, startup successful. Data {1: 2, 3: 4, 5: 6, foo: bar, Kung Fu: Hustle}");
     AssertPrints(
         Info(
             "Starting application",
@@ -107,6 +109,38 @@ void TestFileOutput()
     AssertTrue(i > 0);  // We saw some lines
 }
 
+void ReadmeExampleCode()
+{
+    string info = "interesting info";
+    string moreInfo = "more interesting info";
+    string reason = "things went wrong";
+
+    SetupLogging();
+    AddFileDestination("application.log");
+    SetDebugLevel(1);
+
+    // Simple message
+    Info("Starting application", "startup successful");
+
+    // Message with additional data
+    Info(   "Starting application", "startup successful",
+            { I("info", info), I("more_info", moreInfo) });
+
+    Warning("Starting application", "wait I don't like the looks of this");
+
+    // Persistent logging data used for multiple messages
+    InfoBlob blob = { I("info", info), I("moreInfo", moreInfo) };
+
+    Error("Starting application", "startup failed", blob, { I("reason", reason) });
+
+    // Not shown due to debug level
+    Debug(2, "Starting application", "here is some really detailed info", blob);
+
+    Debug(1, "Starting application", "here is some detailed info", { I("info", info) });
+
+    ShutdownLogging();
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -127,6 +161,11 @@ int main(int argc, char* argv[])
     AssertTrue(remove(logFileName.c_str()) == 0);
     ifstream file(logFileName);
     AssertTrue(!file.is_open());
+
+    ReadmeExampleCode();
+
+    char c;
+    cin >> c;
 
     EndTest
 }
