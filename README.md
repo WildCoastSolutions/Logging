@@ -73,6 +73,10 @@ The correct include path to use after installing the Nuget package is
 #include "Wild/Logging.h"
 ```
 
+## Namespace
+
+All code is in the `Wild::Logging` namespace.
+
 # Using
 
 ##Setting Up
@@ -85,24 +89,26 @@ The library will write errors to stderr and all other messages to stdout by defa
 
 A typical log function looks like this:
 
-```Info(doing, result, [info_blob], [info])```
+`Info(doing, result, [info_blob], [info])`
 
-Supported types are ```Info, Warning, Error & Debug```
-
-Param  | Description
+Parameter  | Description
 ------------- | -------------
-doing  | what the code is trying to accomplish right now, usually contains a verb e.g. connecting to database
-result | what happened e.g. connection failed
+doing  | what the code is trying to accomplish right now, usually contains a verb e.g. **Connecting to database**
+result | what happened e.g. **connection failed**
 info_blob | optional prebuilt list of name value pairs
 info | list of name value pairs for this message only
 
-One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on a project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene (http://oldmountainart.com/).
+Supported types are `Info`, `Warning`, `Error` & `Debug`, [here is a good stack overflow discussion on when to use which](http://stackoverflow.com/questions/7839565/logging-levels-logback-rule-of-thumb-to-assign-log-levels).
 
-| doing  | what the code is trying to accomplish right now, usually contains a verb e.g. connecting to database |
-| result | what happened e.g. connection failed | 
-| info_blob | optional prebuilt list of name value pairs |
-| info | list of name value pairs for this message only |
+Debug works slightly differently in that it takes a debug level as first parameter:
 
+`Debug(level, doing, result, [info_blob], [info])`
+
+If level is less than or equal to the global debugging level, the message is logged, otherwise it is ignored. E.g. if the debug level is 2, Debug messages with level 1 and 2 will be printed, level 3 and higher will be ignored.
+
+### Note on "doing" and "result" strings
+
+One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on an enterprise level project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene (@ailene, http://oldmountainart.com/).
 
 ## Platforms
 
