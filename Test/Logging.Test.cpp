@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
     ifstream file(logFileName);
     AssertTrue(!file.is_open());
 
-    ReadmeExampleCode();
+    //ReadmeExampleCode();
 
     EndTest
 }
