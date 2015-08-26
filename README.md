@@ -89,6 +89,13 @@ A typical log function looks like this:
 
 Supported types are ```Info, Warning, Error & Debug```
 
+Param  | Description
+------------- | -------------
+doing  | what the code is trying to accomplish right now, usually contains a verb e.g. connecting to database
+result | what happened e.g. connection failed
+info_blob | optional prebuilt list of name value pairs
+info | list of name value pairs for this message only
+
 One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on a project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene (http://oldmountainart.com/).
 
 | doing  | what the code is trying to accomplish right now, usually contains a verb e.g. connecting to database |
