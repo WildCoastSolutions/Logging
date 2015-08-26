@@ -1,6 +1,6 @@
 nuget {
    nuspec {
-      id = WildCoastLogging;
+      id = WildLogging;
       version : 1.0.0.0;
       title: Wild Coast Logging;
       authors: {Wild Coast Solutions};
