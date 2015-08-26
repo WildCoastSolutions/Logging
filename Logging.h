@@ -6,7 +6,11 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 //
-// This file contains an implementation of a simple logging framework. 
+// This file contains an implementation of a simple logging framework.
+// This works by maintaining a single Logger class that has various 
+// message destinations that are mapped to the message level (Info, Debug, Warning, Error)
+// E.g. for an Info message the Logger sends that message to all destinations
+// registered to handle Info. Valid destinations are File, Stdout and Stderr.
 
 
 #ifndef WILD_LOGGING_LOGGING_H
@@ -30,12 +34,14 @@ namespace Wild
 {
 	namespace Logging
 	{
+        // Possible destinations for log messages
         enum class DestinationType{
             Stdout,
             Stderr,
             File
         };
 
+        // Levels supported for log messages
         enum class Level{
             Info,
             Debug,
@@ -43,6 +49,7 @@ namespace Wild
             Error
         };
 
+        // Overload to print out Level enum
         std::ostream& operator << (std::ostream& os, const Level& l)
         {
             switch (l)
@@ -55,12 +62,14 @@ namespace Wild
             return os;
         }
 
+        // Base class for log message destinations, all children must implement Write
         class Destination
         {
         public:
             virtual void Write(const std::string &s) = 0;
         };
 
+        // File destination, writes out messages to log file
         class FileDestination : public Destination
         {
         public:
@@ -84,6 +93,7 @@ namespace Wild
             std::ofstream out;
         };
 
+        // Stdout destination
         class Stdout : public Destination
         {
         public:
@@ -93,6 +103,7 @@ namespace Wild
             }
         };
 
+        // Stderr destination
         class Stderr : public Destination
         {
         public:
@@ -127,10 +138,11 @@ namespace Wild
             return s.str();
         }
 
+        // Class that drives the logging process, maintains destinations and routes messages to them.
+        // Not designed to be directly used by the user application.
         class Logger
         {
         public:
-
 
             // Make sure we clean up all destinations we know about, this ensure we close any open files
             ~Logger()
@@ -181,6 +193,7 @@ namespace Wild
                 }
             }
 
+            // Sets the global debug level
             void SetDebugLevel(int debugLevel)
             {
                 m_debugLevel = debugLevel;
@@ -191,6 +204,9 @@ namespace Wild
                 return m_debugLevel;
             }
 
+            // Log function that drives the logging process - all log messages will come here.
+            // Formats the message and info, adding timestamp, and maps the level to the 
+            // destinations for outputting.
             void Log(
                 Level level,
                 const std::string &doing,
@@ -221,6 +237,7 @@ namespace Wild
                 }
             }
 
+            // Checks the debug level before logging
             void Debug(
                 int debugLevel,
                 const std::string &doing,
@@ -233,42 +250,15 @@ namespace Wild
 
         private:
 
+            // Maps Level to list of Destinations
             std::map<Level, std::vector<std::shared_ptr<Destination>>> m_destinations;
             int m_debugLevel;
         };
 
-
+        // Static instance of type Logger, all logging comes to this object
         static std::unique_ptr<Logger> g_logger(nullptr);
 
-        void SetupLogging(int debugLevel = 0)
-        {
-            g_logger.reset(new Logger());
-            g_logger->AddStdoutDestination({ Level::Info, Level::Warning, Level::Debug });
-            g_logger->AddStderrDestination({ Level::Error });
-            g_logger->SetDebugLevel(debugLevel);
-        }
-
-        void ShutdownLogging()
-        {
-            g_logger.reset();
-        }
-
-        void SetDebugLevel(int debugLevel)
-        {
-            g_logger->SetDebugLevel(debugLevel);
-        }
-
-        int GetDebugLevel()
-        {
-            return g_logger->GetDebugLevel();
-        }
-
-        void AddFileDestination(const std::string &filePath)
-        {
-            g_logger->AddFileDestination(filePath);
-        }
-
-
+        // Helper function for level specifi log functions e.g. Info
         void Log(
             Level level,
             const std::string &doing,
@@ -278,6 +268,7 @@ namespace Wild
             g_logger->Log(level, doing, result, data);
         }
 
+        // Helper function for level specifi log functions e.g. Info
         void Log(
             Level level,
             const std::string &doing,
@@ -293,6 +284,42 @@ namespace Wild
 
 
 
+        // Functions below here are intended to form the public interface of the library ------------------
+
+        // Setup static instance of Logger and add default destinations
+        void SetupLogging(int debugLevel = 0)
+        {
+            g_logger.reset(new Logger());
+            g_logger->AddStdoutDestination({ Level::Info, Level::Warning, Level::Debug });
+            g_logger->AddStderrDestination({ Level::Error });
+            g_logger->SetDebugLevel(debugLevel);
+        }
+
+        // Optional shutdown function, can be called when all logging is done, 
+        // or objects will be freed when program exits
+        void ShutdownLogging()
+        {
+            g_logger.reset();
+        }
+
+        void SetDebugLevel(int debugLevel)
+        {
+            g_logger->SetDebugLevel(debugLevel);
+        }
+
+        int GetDebugLevel()
+        {
+            return g_logger->GetDebugLevel();
+        }
+
+        // Creates file destination for all levels
+        // Could enable routing specific levels to different files if needed, but why?
+        void AddFileDestination(const std::string &filePath)
+        {
+            g_logger->AddFileDestination(filePath);
+        }
+
+        // Info message
         void Info(
             const std::string &doing,
             const std::string &result,
@@ -301,6 +328,7 @@ namespace Wild
             Log(Level::Info, doing, result, data);
         }
 
+        // Info message with info blob
         void Info(
             const std::string &doing,
             const std::string &result,
