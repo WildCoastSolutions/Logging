@@ -164,8 +164,5 @@ int main(int argc, char* argv[])
 
     ReadmeExampleCode();
 
-    char c;
-    cin >> c;
-
     EndTest
 }
