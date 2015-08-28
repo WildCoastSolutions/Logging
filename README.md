@@ -1,7 +1,8 @@
 # C++ Logging
 
-This is a simple, header only, no dependency logging library.
+This is a simple, header only, no dependency, cross platform logging library.
 
+More on this library and others like it can be found at [http://wildcoast.nz/open-source](http://wildcoast.nz/open-source).
 
 # Sample Code
 
