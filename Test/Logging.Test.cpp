@@ -129,7 +129,7 @@ void ReadmeExampleCode()
     Warning("Starting application", "wait I don't like the looks of this");
 
     // Persistent logging data used for multiple messages
-    InfoBlob blob = { I("info", info), I("moreInfo", moreInfo) };
+    InfoBlob blob = { I("info", info), I("more_info", moreInfo) };
 
     Error("Starting application", "startup failed", blob, { I("reason", reason) });
 

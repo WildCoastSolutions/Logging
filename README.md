@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     Warning("Starting application", "wait I don't like the looks of this");
 
     // Persistent logging data used for multiple messages
-    InfoBlob blob = { I("info", info), I("moreInfo", moreInfo) };
+    InfoBlob blob = { I("info", info), I("more_info", moreInfo) };
 
     Error("Starting application", "startup failed", blob, { I("reason", reason) });
 
@@ -52,7 +52,7 @@ The above code results in the following being printed to console and the file ``
 2015-08-26T06:39:29Z Info: Starting application, startup successful.
 2015-08-26T06:39:29Z Info: Starting application, startup successful. Data {info: interesting info, more_info: more interesting info}
 2015-08-26T06:39:29Z Warning: Starting application, wait I don't like the looks of this.
-2015-08-26T06:39:29Z Error: Starting application, startup failed. Data {info: interesting info, moreInfo: more interesting info, reason: things went wrong}
+2015-08-26T06:39:29Z Error: Starting application, startup failed. Data {info: interesting info, more_info: more interesting info, reason: things went wrong}
 2015-08-26T06:39:29Z Debug: Starting application, here is some detailed info. Data {info: interesting info}
 ```
 
