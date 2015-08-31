@@ -29,6 +29,7 @@
 #include <chrono>
 #include <iomanip>
 #include <time.h>
+#include <mutex>
 
 namespace Wild
 {
@@ -67,6 +68,8 @@ namespace Wild
         {
         public:
             virtual void Write(const std::string &s) = 0;
+        protected:
+            std::mutex destinationMutex;    // Protect destinations from being written to at the same time
         };
 
         // File destination, writes out messages to log file
@@ -87,6 +90,8 @@ namespace Wild
 
             void Write(const std::string &s)
             {
+                // Access to the output for this destination must be thread safe
+                std::lock_guard<std::mutex> lock(destinationMutex);
                 out << s << std::flush;
             }
 
@@ -99,6 +104,8 @@ namespace Wild
         public:
             void Write(const std::string &s)
             {
+                // Access to the output for this destination must be thread safe
+                std::lock_guard<std::mutex> lock(destinationMutex);
                 std::cout << s;
             }
         };
@@ -109,6 +116,8 @@ namespace Wild
         public:
             void Write(const std::string &s)
             {
+                // Access to the output for this destination must be thread safe
+                std::lock_guard<std::mutex> lock(destinationMutex);
                 std::cerr << s;
             }
         };
@@ -116,6 +125,7 @@ namespace Wild
         // types for adding extra info to a log message in the form of name value pairs
         typedef std::pair<std::string, std::string> I;
         typedef std::list<I> InfoBlob;
+        
 
         // Generates timestamps for log messages
         std::string Timestamp()

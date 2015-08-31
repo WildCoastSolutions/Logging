@@ -3,6 +3,7 @@
 #include "Logging.h"
 #include "UnitTesting.h"
 #include <fstream>
+#include <thread>
 
 using namespace Wild::Logging;
 using namespace std;
@@ -102,11 +103,55 @@ void TestFileOutput()
     size_t i = 0;
     while (std::getline(file, line))
     {
-        AssertEquals(line, allLines[i]);
+        if (i < allLines.size())
+        {
+            AssertEquals(line, allLines[i]);
+        }
+        else
+        {
+            AssertEquals(81, line.size());  // Check all our multithreaded file writes from TestThreadedBehaviour aren't interleaved etc
+        }
         i++;
     }
 
     AssertTrue(i > 0);  // We saw some lines
+}
+
+void Thread1()
+{
+    InfoBlob blob({ I("thread#", "1") });
+    for (int i = 0; i < 100; i++)
+        Info("Logging from thread", "thread running", blob);
+}
+
+void Thread2()
+{
+    InfoBlob blob({ I("thread#", "2") });
+    for (int i = 0; i < 100; i++)
+        Info("Logging from thread", "thread running", blob);
+}
+
+void TestThreadedBehaviour()
+{
+    stringstream output;
+    streambuf* original = std::cout.rdbuf(output.rdbuf());
+
+    InfoBlob blob({ I("thread#", "0") });
+    thread t1(Thread1);
+    thread t2(Thread2);
+    for (int i = 0; i < 100; i++)
+        Info("Logging from thread", "thread running", blob);
+    t1.join();
+    t2.join();
+
+    string out = output.str();
+    std::cout.rdbuf(original);
+
+    string line;
+    while (std::getline(output, line, '\n')) {
+        AssertEquals(81, line.size());
+    }
+
 }
 
 void ReadmeExampleCode()
@@ -154,6 +199,7 @@ int main(int argc, char* argv[])
     TestLogging();
     TestDebugging();
 
+    TestThreadedBehaviour();
     TestFileOutput();
 
     ShutdownLogging();
@@ -163,6 +209,7 @@ int main(int argc, char* argv[])
     AssertTrue(!file.is_open());
 
     //ReadmeExampleCode();
+
 
     EndTest
 }
