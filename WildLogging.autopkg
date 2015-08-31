@@ -9,11 +9,11 @@ nuget {
       iconUrl: "http://wildcoast.nz/nuget.png";
       requireLicenseAcceptance:false;
       summary:@"Simple, header only, no dependency logging library.";
-      description: @"Simple, header only, no dependency logging library with an emphasis on being clean and easy to use. Supports console and file logging.";
+      description: @"Simple, header only, no dependency, cross platform logging library with an emphasis on being clean and easy to use. Supports console and file logging.";
       releaseNotes: "";
       projectUrl: "https://github.com/WildCoastSolutions/Logging";
       copyright: Copyright (c) 2014-2015 Wild Coast Solutions. All rights reserved.;
-      tags: { logging, native, c++, simple };
+      tags: { logging, native, c++, simple, cross platform };
    };
  
    files {
