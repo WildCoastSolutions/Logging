@@ -111,6 +111,12 @@ If level is less than or equal to the global debugging level, the message is log
 
 One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on an enterprise level project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene ([@ailene](https://github.com/ailene), http://oldmountainart.com/).
 
+## Thread safety
+
+Log messages have mutexes around writes to output and file streams, so the library should perform fine when used from multiple threads. Thanks to [/u/zorkmids](https://www.reddit.com/user/zorkmids) for pointing out the need for this.
+
+Note that setup, adding destinations and shutdown of the library have no special protection against multithread access. It's expected the user application will do these tasks outside any working threads at application start and end.
+
 ## Compiling And Running Tests
 
 Note that the [Unit Testing](https://github.com/WildCoastSolutions/UnitTesting) library is required alongside this library to compile the tests. E.g.
