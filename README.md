@@ -111,9 +111,25 @@ If level is less than or equal to the global debugging level, the message is log
 
 One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on an enterprise level project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene ([@ailene](https://github.com/ailene), http://oldmountainart.com/).
 
-## Platforms
+## Compiling And Running Tests
 
-It was built on VS2013 but should work on earlier versions though it does require C++11 features, and tested on gcc 4.8.2. Info in this document is VS specific but all the concepts translate to Linux. The Linux build uses cmake, to test the lib it you can clone it, enter the directory and use
+Note that the [Unit Testing](https://github.com/WildCoastSolutions/UnitTesting) library is required alongside this library to compile the tests. E.g.
+
+```
+  Wild/
+     Logging/
+     UnitTesting/
+```
+
+### Windows
+
+`Logging.sln` contains the library and test projects, compilation also runs the tests.
+
+It was built with VS2013 but should work with other versions though it does require C++11 features.
+
+### Linux
+
+The Linux build uses cmake, to test the lib it you can clone it, enter the directory and use
 
 ```
 cmake .
@@ -121,10 +137,3 @@ make
 Test\LoggingTest
 ```
 
-Note that the [Unit Testing](https://github.com/WildCoastSolutions/UnitTesting) library is required alongside this library to compile the tests. E.g.
-
-```
-  wild/
-     Logging/
-     UnitTesting/
-```
