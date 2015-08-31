@@ -109,7 +109,7 @@ If level is less than or equal to the global debugging level, the message is log
 
 ### Note on "doing" and "result" strings
 
-One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on an enterprise level project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene (@ailene, http://oldmountainart.com/).
+One difference from other logging libraries is the requirement to add two messages. This is a way to improve the readability and usefulness of the logs. We used this general idea on an enterprise level project a few years ago and found that almost everything you want to log can be expressed this way. Credit for this idea goes to our user experience expert Ailene ([@ailene](https://github.com/ailene), http://oldmountainart.com/).
 
 ## Platforms
 
@@ -121,3 +121,10 @@ make
 Test\LoggingTest
 ```
 
+Note that the [Unit Testing](https://github.com/WildCoastSolutions/UnitTesting) library is required alongside this library to compile the tests. E.g.
+
+```
+  wild/
+     Logging/
+     UnitTesting/
+```
