@@ -1,0 +1,26 @@
+nuget {
+   nuspec {
+      id = WildCoastLogging;
+      version : 1.0.1.0;
+      title: Wild Coast Logging (Deprecated);
+      authors: {Wild Coast Solutions};
+      owners: {Wild Coast Solutions};
+      licenseUrl: "http://www.opensource.org/licenses/mit-license.php";
+      iconUrl: "http://wildcoast.nz/nuget.png";
+      requireLicenseAcceptance:false;
+      summary:@"DEPRECATED - the new id for this package is WildLogging, please change to this one";
+      description: @"DEPRECATED - the new id for this package is WildLogging, please change to this one.";
+      releaseNotes: "New id for this package is WildLogging, please change to get the latest version.";
+      projectUrl: "https://github.com/WildCoastSolutions/Logging";
+      copyright: Copyright (c) 2014-2015 Wild Coast Solutions. All rights reserved.;
+      tags: { deprecated, logging, native, c++, simple, cross platform, header only };
+   };
+ 
+   files {
+      nestedInclude: 
+         { 
+            #destination = ${d_include}Wild;
+            "*.h"
+         };
+   };
+}
