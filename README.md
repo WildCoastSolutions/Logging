@@ -4,6 +4,10 @@ This is a simple, header only, no dependency, cross platform logging library.
 
 More on this library and others like it can be found at [http://wildcoast.nz/open-source](http://wildcoast.nz/open-source).
 
+[Download the latest version directly (right click, download)](https://raw.githubusercontent.com/WildCoastSolutions/Logging/master/Logging.h).
+
+Travis CI build & test status: [![Build Status](https://api.travis-ci.org/WildCoastSolutions/Logging.svg?branch=master)](https://travis-ci.org/WildCoastSolutions/Logging)
+
 # Sample Code
 
 ```C++
@@ -61,6 +65,8 @@ The above code results in the following being printed to console and the file ``
 ## Download
 
 All you need to use this library is to put ```Logging.h``` in your project and include it in your code.
+
+[Download the latest version directly (right click, download)](https://raw.githubusercontent.com/WildCoastSolutions/Logging/master/Logging.h).
 
 ## Nuget
 

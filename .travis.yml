@@ -1,0 +1,23 @@
+language: cpp
+
+compiler:
+  - clang
+  - gcc
+
+env:
+  - BUILD_TYPE=Debug
+  - BUILD_TYPE=Release
+
+before_install:
+  - wget https://raw.githubusercontent.com/WildCoastSolutions/UnitTesting/master/UnitTesting.h -O ./Test/UnitTesting.h
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get install -qq g++-4.8
+  - export CXX="g++-4.8"
+  - cmake .
+  - make
+
+script:
+  - ./Test/LoggingTest
