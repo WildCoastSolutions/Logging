@@ -11,6 +11,8 @@
 // message destinations that are mapped to the message level (Info, Debug, Warning, Error)
 // E.g. for an Info message the Logger sends that message to all destinations
 // registered to handle Info. Valid destinations are File, Stdout and Stderr.
+//
+// Project url: https://github.com/WildCoastSolutions/Logging
 
 
 #ifndef WILD_LOGGING_LOGGING_H
