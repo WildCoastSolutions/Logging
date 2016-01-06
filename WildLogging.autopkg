@@ -1,7 +1,7 @@
 nuget {
    nuspec {
       id = WildLogging;
-      version : 1.0.1.0;
+      version : 1.0.2.0;
       title: Wild Coast Logging;
       authors: {Wild Coast Solutions};
       owners: {Wild Coast Solutions};
@@ -10,10 +10,10 @@ nuget {
       requireLicenseAcceptance:false;
       summary:@"Simple, header only, no dependency logging library.";
       description: @"Simple, header only, no dependency, cross platform logging library with an emphasis on being clean and easy to use. Supports console and file logging.";
-      releaseNotes: "Made all writes multithread aware.";
+      releaseNotes: "";
       projectUrl: "https://github.com/WildCoastSolutions/Logging";
-      copyright: Copyright (c) 2014-2015 Wild Coast Solutions. All rights reserved.;
-      tags: { logging, native, c++, simple, cross platform, header only };
+      copyright: Copyright (c) 2014-2016 Wild Coast Solutions. All rights reserved.;
+      tags: { logging, native, c++, simple, cross platform, header only, no dependency };
    };
  
    files {
