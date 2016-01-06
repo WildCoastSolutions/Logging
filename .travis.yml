@@ -9,6 +9,7 @@ env:
   - BUILD_TYPE=Release
 
 before_install:
+  - wget https://raw.githubusercontent.com/WildCoastSolutions/UnitTesting/master/UnitTesting.h -O ./Test/UnitTesting.h
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
 
