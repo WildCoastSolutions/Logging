@@ -53,7 +53,7 @@ namespace Wild
         };
 
         // Overload to print out Level enum
-        std::ostream& operator << (std::ostream& os, const Level& l)
+        static std::ostream& operator << (std::ostream& os, const Level& l)
         {
             switch (l)
             {
@@ -130,7 +130,7 @@ namespace Wild
         
 
         // Generates timestamps for log messages
-        std::string Timestamp()
+        static std::string Timestamp()
         {
             auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::stringstream s;
@@ -155,9 +155,20 @@ namespace Wild
         class Logger
         {
         public:
+            Logger() {}
+            static Logger& instance()
+            {
+                static Logger instance;
+                return instance;
+            }
 
             // Make sure we clean up all destinations we know about, this ensure we close any open files
             ~Logger()
+            {
+                Shutdown();
+            }
+
+            void Shutdown()
             {
                 for (auto &destinations : m_destinations)
                 {
@@ -226,7 +237,11 @@ namespace Wild
                 const InfoBlob &blob)
             {
                 std::stringstream s;
-                s << Timestamp() << " " << level << ": "<< doing << ", " << result << ".";
+                s << Timestamp() << " " << level << ": " << doing;
+                if (result.size() > 0)
+                    s << ", " << result << ".";
+                else
+                    s << ".";
                 if (blob.size() > 0)
                 {
                     s << " Data {";
@@ -267,21 +282,18 @@ namespace Wild
             int m_debugLevel;
         };
 
-        // Static instance of type Logger, all logging comes to this object
-        static std::unique_ptr<Logger> g_logger(nullptr);
-
-        // Helper function for level specifi log functions e.g. Info
-        void Log(
+        // Helper function for level specific log functions e.g. Info
+        static void Log(
             Level level,
             const std::string &doing,
             const std::string &result,
             const std::initializer_list<I> &data = {})
         {
-            g_logger->Log(level, doing, result, data);
+            Logger::instance().Log(level, doing, result, data);
         }
 
-        // Helper function for level specifi log functions e.g. Info
-        void Log(
+        // Helper function for level specific log functions e.g. Info
+        static void Log(
             Level level,
             const std::string &doing,
             const std::string &result,
@@ -291,7 +303,7 @@ namespace Wild
             // Merge blob and data
             InfoBlob b = blob;
             b.insert(b.end(), data);
-            g_logger->Log(level, doing, result, b);
+            Logger::instance().Log(level, doing, result, b);
         }
 
 
@@ -299,40 +311,39 @@ namespace Wild
         // Functions below here are intended to form the public interface of the library ------------------
 
         // Setup static instance of Logger and add default destinations
-        void SetupLogging(int debugLevel = 0)
+        static void SetupLogging(int debugLevel = 0)
         {
-            g_logger.reset(new Logger());
-            g_logger->AddStdoutDestination({ Level::Info, Level::Warning, Level::Debug });
-            g_logger->AddStderrDestination({ Level::Error });
-            g_logger->SetDebugLevel(debugLevel);
+            Logger::instance().AddStdoutDestination({ Level::Info, Level::Warning, Level::Debug });
+            Logger::instance().AddStderrDestination({ Level::Error });
+            Logger::instance().SetDebugLevel(debugLevel);
         }
 
         // Optional shutdown function, can be called when all logging is done, 
         // or objects will be freed when program exits
-        void ShutdownLogging()
+        static void ShutdownLogging()
         {
-            g_logger.reset();
+            Logger::instance().Shutdown();
         }
 
-        void SetDebugLevel(int debugLevel)
+        static void SetDebugLevel(int debugLevel)
         {
-            g_logger->SetDebugLevel(debugLevel);
+            Logger::instance().SetDebugLevel(debugLevel);
         }
 
-        int GetDebugLevel()
+        static int GetDebugLevel()
         {
-            return g_logger->GetDebugLevel();
+            return Logger::instance().GetDebugLevel();
         }
 
         // Creates file destination for all levels
         // Could enable routing specific levels to different files if needed, but why?
-        void AddFileDestination(const std::string &filePath)
+        static void AddFileDestination(const std::string &filePath)
         {
-            g_logger->AddFileDestination(filePath);
+            Logger::instance().AddFileDestination(filePath);
         }
 
         // Info message
-        void Info(
+        static void Info(
             const std::string &doing,
             const std::string &result,
             const std::initializer_list<I> &data = {})
@@ -340,8 +351,24 @@ namespace Wild
             Log(Level::Info, doing, result, data);
         }
 
+        static void Info(
+            const std::string &info,
+            const std::initializer_list<I> &data = {})
+        {
+            Log(Level::Info, info, "", data);
+        }
+
         // Info message with info blob
-        void Info(
+
+        static void Info(
+            const std::string &info,
+            const InfoBlob &blob,
+            const std::initializer_list<I> &data = {})
+        {
+            Log(Level::Info, info, "", blob, data);
+        }
+
+        static void Info(
             const std::string &doing,
             const std::string &result,
             const InfoBlob &blob,
@@ -350,7 +377,7 @@ namespace Wild
             Log(Level::Info, doing, result, blob, data);
         }
 
-        void Warning(
+        static void Warning(
             const std::string &doing,
             const std::string &result,
             const std::initializer_list<I> &data = {})
@@ -358,7 +385,7 @@ namespace Wild
             Log(Level::Warning, doing, result, data);
         }
 
-        void Warning(
+        static void Warning(
             const std::string &doing,
             const std::string &result,
             const InfoBlob &blob,
@@ -367,7 +394,7 @@ namespace Wild
             Log(Level::Warning, doing, result, blob, data);
         }
 
-        void Error(
+        static void Error(
             const std::string &doing,
             const std::string &result,
             const std::initializer_list<I> &data = {})
@@ -375,7 +402,7 @@ namespace Wild
             Log(Level::Error, doing, result, data);
         }
 
-        void Error(
+        static void Error(
             const std::string &doing,
             const std::string &result,
             const InfoBlob &blob,
@@ -384,16 +411,36 @@ namespace Wild
             Log(Level::Error, doing, result, blob, data);
         }
 
-        void Debug(
+        static void Debug(
             int debugLevel,
             const std::string &doing,
             const std::string &result,
             const std::initializer_list<I> &data = {})
         {
-            g_logger->Debug(debugLevel, doing, result, data);
+            Logger::instance().Debug(debugLevel, doing, result, data);
         }
 
-        void Debug(
+        static void Debug(
+            int debugLevel,
+            const std::string &debug,
+            const std::initializer_list<I> &data = {})
+        {
+            Logger::instance().Debug(debugLevel, debug, "", data);
+        }
+
+        static void Debug(
+            int debugLevel,
+            const std::string &debug,
+            const InfoBlob &blob,
+            const std::initializer_list<I> &data = {})
+        {
+            // Merge blob and data
+            InfoBlob b = blob;
+            b.insert(b.end(), data);
+            Logger::instance().Debug(debugLevel, debug, "", b);
+        }
+
+        static void Debug(
             int debugLevel,
             const std::string &doing,
             const std::string &result,
@@ -403,7 +450,7 @@ namespace Wild
             // Merge blob and data
             InfoBlob b = blob;
             b.insert(b.end(), data);
-            g_logger->Debug(debugLevel, doing, result, b);
+            Logger::instance().Debug(debugLevel, doing, result, b);
         }
 	}
 }

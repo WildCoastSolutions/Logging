@@ -2,6 +2,7 @@
 
 #include "Logging.h"
 #include "UnitTesting.h"
+#include "Tests.h"
 #include <fstream>
 #include <thread>
 
@@ -19,6 +20,11 @@ void TestLogging()
     allLines.push_back(Timestamp() + " Info: Starting application, startup successful. Data {1: 2, 3: 4}");
     AssertPrints(
         Info("Starting application", "startup successful", b),
+        allLines.back() + "\n");
+
+    allLines.push_back(Timestamp() + " Info: Started application. Data {1: 2, 3: 4}");
+    AssertPrints(
+        Info("Started application", b),
         allLines.back() + "\n");
     
     allLines.push_back(Timestamp() + " Info: Starting application, startup successful. Data {foo: bar, Kung Fu: Hustle}");
@@ -198,8 +204,10 @@ int main(int argc, char* argv[])
 
     TestLogging();
     TestDebugging();
+    AdditionalFileTests();
 
     TestThreadedBehaviour();
+
     TestFileOutput();
 
     ShutdownLogging();
