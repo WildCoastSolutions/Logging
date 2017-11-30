@@ -205,6 +205,7 @@ int main(int argc, char* argv[])
     TestLogging();
     TestDebugging();
     AdditionalFileTests();
+    TestIndividualLoggers();
 
     TestThreadedBehaviour();
 

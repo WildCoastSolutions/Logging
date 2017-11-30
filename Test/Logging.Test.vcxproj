@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClCompile Include="AdditionalTestFile.cpp" />
     <ClCompile Include="Logging.Test.cpp" />
+    <ClCompile Include="TestIndividualLoggers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging.vcxproj">
